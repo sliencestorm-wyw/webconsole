@@ -27,7 +27,7 @@ webconsole_start() {
 
 webconsole_stop() {
         /opt/webconsole/bin/apibox  stop   >/dev/null   2>&1 &
-        rm -rf  $PIDFILE
+        rm -f  $PIDFILE
 
 }
 
