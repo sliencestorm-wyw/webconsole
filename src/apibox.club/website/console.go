@@ -217,7 +217,7 @@ func SSHWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 			}
                         
                         execmd := execMsg{
-                                Command: "docker exec -it " + vm_cid + " /bin/sh -c '/bin/bash || /bin/sh'",
+                                Command: "docker exec -it " + vm_cid + " /bin/sh -c 'if [ -x /bin/bash ];then /bin/bash;else /bin/sh;fi'",
                         }
                         if vm_cid == "none" {
 				ok, err = channel.SendRequest("shell", true, nil)
