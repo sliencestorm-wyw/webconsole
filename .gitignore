@@ -27,6 +27,8 @@ bin/apibox
 
 .vscode/tasks.json
 
-bin/apibox
-
-bin/apibox
+/bin/apibox
+log/
+src/github.com/
+src/golang.org/
+*.swp

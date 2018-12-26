@@ -59,6 +59,8 @@ type (
 		TlsCert        string `json:"tls_cert,omitempty" xml:"tls_cert,omitempty"`
 		TlsKey         string `json:"tls_key,omitempty" xml:"tls_key,omitempty"`
 		Daemon         bool   `json:"daemon,omitempty" xml:"daemon,omitempty"`
+                UrlTimeout     string `json:"url_timeout,omitempty" xml:"url_timeout,omitempty"`
+                LogLevel       string `json:"log_level,omitempty" xml:"log_level,omitempty"`
 	}
 
 	DB_Conf struct {
