@@ -1,8 +1,6 @@
-##欢迎大家踊跃报名，利用业余时间来拓展此项目，增加更多的功能服务大家。
-==================
+# 欢迎大家踊跃报名，利用业余时间来拓展此项目，增加更多的功能服务大家。
 
-##常规部署
-------------------
+## 常规部署
 ```
 1、下载 go1.8.1.linux-amd64.tar.gz
 2、tar zxvf go1.8.1.linux-amd64.tar.gz -C /usr/local
@@ -21,8 +19,7 @@
 [下载 Golang](https://storage.googleapis.com/golang/go1.8.1.linux-amd64.tar.gz)
 
 
-##容器部署
-------------------
+## 容器部署
 ```
 1、下载并安装 Docker
 2、cd /opt && git clone --recurse-submodules https://github.com/shibingli/webconsole.git && cd webconsole && git submodule update --init --recursive
@@ -36,8 +33,7 @@
 [安装 Docker](https://docs.docker.com/engine/installation/)
 
 
-##开源捐献日志（感谢各位网友的支持）
-==================
+## 开源捐献日志（感谢各位网友的支持）
 
 2017-11-22
 
@@ -68,8 +64,7 @@
 
     @玩蝴蝶的法师(qq:43588476)   捐献：50.00 元（人民币）
 
-##更新日志
-==================
+## 更新日志
 
 2017.07.31
 
@@ -188,14 +183,12 @@
         1、增加后台运行模式(conf/conf.json.  daemon:true/false);
         2、增加程序运行时的PID文件(log/apibox.pid);
 
-##大概的数据流向：
-==================
+## 大概的数据流向：
 ```
     浏览器--》WebSocket--》SSH--》Linux OS
 ```
 
-###代码地址
-=================
+### 代码地址
 
 [Git@OSC](http://git.oschina.net/shibingli/webconsole)
 
@@ -206,8 +199,7 @@
 [演示地址](http://webconsole.realclouds.org)
     
 
-##程序包结构：
-================
+## 程序包结构：
 
 ```
 ├── bin
@@ -267,12 +259,11 @@
 
     2）、成功获取到加密的 en_addr 信息后，以 GET 或 POST 方式访问  "http(s)://ip:port/console/login/'en_addr'" 即可。注: "en_addr" 是通过第 1）步操作获取的数据。
 
-##JQuery Demo:
-======
+## JQuery Demo:
 
         
-###第一种方式（需要二次登陆，同一个域的情况，同样可以使用跨域的方式访问）：
-======
+### 第一种方式（需要二次登陆，同一个域的情况，同样可以使用跨域的方式访问）：
+
 
 ```javascript
 var protocol = (location.protocol === "https:") ? "https://" : "http://";
@@ -293,8 +284,7 @@ $.post(addr+"/console/chksshdaddr?rnd=" + Math.random(), {
 
 
 
-###第二种方式（直接输入远端的主机地址、用户名、密码，然后直接登陆。跨域的情况）：
-======
+### 第二种方式（直接输入远端的主机地址、用户名、密码，然后直接登陆。跨域的情况）：
 
 ```html
 <button class="btn btn-primary" onclick="testDemo();">Test</button>

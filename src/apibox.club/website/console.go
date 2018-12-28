@@ -32,6 +32,7 @@ func (s *ssh) Connect() (*ssh, error) {
 	config.SetDefaults()
 	config.User = s.user
 	config.Auth = []gossh.AuthMethod{gossh.Password(s.pwd)}
+        config.HostKeyCallback = func(hostname string, remote net.Addr, key gossh.PublicKey) error { return nil }
 	client, err := gossh.Dial("tcp", s.addr, config)
 	if nil != err {
 		return nil, err
@@ -121,6 +122,11 @@ type jsonMsg struct {
 	Data string `json:"data"`
 }
 
+// RFC 4254 Section 6.5
+type execMsg struct {
+	Command  string
+}
+
 func SSHWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := NewContext(w, r)
 	ws, err := upgrader.Upgrade(w, r, nil)
@@ -142,10 +148,11 @@ func SSHWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		de_vm_info_arr := strings.Split(de_vm_info, "\n")
-		if len(de_vm_info_arr) == 3 {
+		if len(de_vm_info_arr) == 5 {
 			user_name := strings.TrimSpace(de_vm_info_arr[0])
 			user_pwd := strings.TrimSpace(de_vm_info_arr[1])
 			vm_addr := strings.TrimSpace(de_vm_info_arr[2])
+                        vm_cid := strings.TrimSpace(de_vm_info_arr[4])
 
 			apibox.Log_Debug("VM Addr:", vm_addr)
 
@@ -210,11 +217,24 @@ func SSHWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 				apibox.Log_Err(err)
 				return
 			}
-			ok, err = channel.SendRequest("shell", true, nil)
-			if !ok || err != nil {
-				apibox.Log_Err(err)
-				return
-			}
+                        
+                        execmd := execMsg{
+                                Command: "docker exec -it " + vm_cid + " /bin/sh -c 'if [ -x /bin/bash ];then /bin/bash;else /bin/sh;fi'",
+                        }
+                        if vm_cid == "none" {
+				ok, err = channel.SendRequest("shell", true, nil)
+				if !ok || err != nil {
+					apibox.Log_Err(err)
+					return
+				}
+                        } else {
+				ok, err = channel.SendRequest("exec", true, gossh.Marshal(&execmd))
+				if !ok || err != nil {
+					apibox.Log_Err(err)
+					return
+				}
+
+                        }
 
 			done := make(chan bool, 2)
 			go func() {
@@ -342,10 +362,25 @@ func (c *Console) ConsoleMainPage(w http.ResponseWriter, r *http.Request) {
 		ctx.OutHtml("login", nil)
 	} else {
 		de_vm_info_arr := strings.Split(de_vm_info, "\n")
-		if len(de_vm_info_arr) == 3 {
+		if len(de_vm_info_arr) == 5 {
 			user_name := strings.TrimSpace(de_vm_info_arr[0])
 			user_pwd := strings.TrimSpace(de_vm_info_arr[1])
 			vm_addr := strings.TrimSpace(de_vm_info_arr[2])
+                        vm_time := strings.TrimSpace(de_vm_info_arr[3])
+
+			now := time.Now()
+			start, _ := time.Parse("2006-01-02 15:04:05", vm_time)
+			du, _ := time.ParseDuration("-8h")
+			start = start.Add(du) //("2006-01-02 15:04:05")
+			url_timeout, err := time.ParseDuration(Conf.Web.UrlTimeout)
+			if nil != err {
+				url_timeout, _ = time.ParseDuration("60s")
+			}
+			if now.Sub(start) > url_timeout {
+				ctx.OutHtml("console/console_access", nil)
+				return
+			}
+
 
 			cmpd := ConsoleMainPageData{
 				UserName: user_name,
@@ -368,6 +403,14 @@ func (c *Console) ConsoleLogin(w http.ResponseWriter, r *http.Request) {
 	user_name := ctx.GetFormValue("user_name")
 	user_pwd := ctx.GetFormValue("user_pwd")
 	vm_addr := ctx.GetFormValue("vm_addr")
+        vm_cid := ctx.GetFormValue("vm_cid")
+	vm_time := time.Now().Format("2006-01-02 15:04:05")
+
+        apibox.Log_Debug(user_name,user_pwd,vm_addr,vm_cid,vm_time)
+
+	if vm_cid == "" {
+		vm_cid = "none"
+	}
 
 	var err error
 	boo := true
@@ -386,6 +429,7 @@ func (c *Console) ConsoleLogin(w http.ResponseWriter, r *http.Request) {
 			addr: vm_addr,
 		}
 		sh, err = sh.Connect()
+                apibox.Log_Debug(err)
 		if nil != err {
 			result.Ok = false
 			result.Msg = "无法连接到远端主机，请确认远端主机已开机且保证口令的正确性。"
@@ -399,6 +443,8 @@ func (c *Console) ConsoleLogin(w http.ResponseWriter, r *http.Request) {
 				ssh_info = append(ssh_info, user_name)
 				ssh_info = append(ssh_info, user_pwd)
 				ssh_info = append(ssh_info, vm_addr)
+                                ssh_info = append(ssh_info, vm_time)
+				ssh_info = append(ssh_info, vm_cid)
 				b64_ssh_info, err := apibox.AESEncode(strings.Join(ssh_info, "\n"), aesKey)
 				if nil != err {
 					apibox.Log_Err("AESEncode:", err)
@@ -456,4 +502,20 @@ func init() {
 	Add_HandleFunc("get,post", "/console/logout", console.ConsoleLogout)
 	Add_HandleFunc("get,post", "/console/main/:vm_info", console.ConsoleMainPage)
 	Add_HandleFunc("get,post", "/console/sshws/:vm_info", SSHWebSocketHandler)
+
+        switch Conf.Web.LogLevel {
+	case "Debug":
+		apibox.Set_log_level(apibox.LevelDebug)
+	case "Error":
+		apibox.Set_log_level(apibox.LevelError)
+	case "Fatal":
+		apibox.Set_log_level(apibox.LevelFatal)
+	case "Warn":
+		apibox.Set_log_level(apibox.LevelWarn)
+	case "Info":
+		apibox.Set_log_level(apibox.LevelInfo)
+	default:
+		apibox.Set_log_level(apibox.LevelInfo)
+
+	}
 }
