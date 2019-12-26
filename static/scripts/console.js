@@ -5,23 +5,23 @@
  * QQ:155122504
  *
  */
-(function(factory) {
-        "use strict";
-        if (typeof define === "function" && (define.amd || define.cmd)) {
-            define(["jquery"], factory);
-        } else {
-            factory((typeof(jQuery) != "undefined") ? jQuery : window.Zepto);
-        }
+(function (factory) {
+    "use strict";
+    if (typeof define === "function" && (define.amd || define.cmd)) {
+        define(["jquery"], factory);
+    } else {
+        factory((typeof (jQuery) != "undefined") ? jQuery : window.Zepto);
     }
-    (function($) {
+}
+    (function ($) {
         "use strict";
         $.extend({
-            LogOut: function() {
+            LogOut: function () {
                 location.href = "/console/logout" + "?rnd=" + Math.random();
             }
         });
 
-        $.fn.ConsoleLogin = function(options) {
+        $.fn.ConsoleLogin = function (options) {
             if (options === undefined) {
                 options = {};
             }
@@ -35,23 +35,23 @@
 
             username.focus();
 
-            var boxMsg = function(t) {
+            var boxMsg = function (t) {
                 loginBoxMsg.html(t);
                 loginBoxMsg.show();
             };
             var p = null;
-            $loginForm.bind("form-pre-serialize", function(event, form, options, veto) {
+            $loginForm.bind("form-pre-serialize", function (event, form, options, veto) {
                 p = userpwd.val();
             });
 
             if (standalone === true) {
-                var keyEvt = function(obj) {
+                var keyEvt = function (obj) {
                     $.post("/console/chksshdaddr?rnd=" + Math.random(), {
                         "vm_addr": obj.val()
-                    }, function(data) {
+                    }, function (data) {
                         console.log("data:", data);
                         var json = data;
-                        if (typeof(data) != "object") {
+                        if (typeof (data) != "object") {
                             json = $.parseJSON(data);
                         }
                         if (json.ok) {
@@ -60,20 +60,20 @@
                         }
                     });
                 };
-                src_vmaddr.unbind("keyup").keyup(function(evt) {
+                src_vmaddr.unbind("keyup").keyup(function (evt) {
                     keyEvt($(this));
                 });
-                src_vmaddr.unbind("paste").bind("paste", function(evt) {
+                src_vmaddr.unbind("paste").bind("paste", function (evt) {
                     keyEvt($(this));
                 });
-                src_vmaddr.unbind("blur").blur(function(evt) {
+                src_vmaddr.unbind("blur").blur(function (evt) {
                     keyEvt($(this));
                 });
             }
 
             $loginForm.ajaxForm({
                 dataType: "json",
-                beforeSubmit: function(a, f, o) {
+                beforeSubmit: function (a, f, o) {
                     loginBoxMsg.hide();
                     if (standalone === true) {
                         if (src_vmaddr.val().length === 0) {
@@ -102,9 +102,9 @@
                         return false;
                     }
                 },
-                success: function(data) {
+                success: function (data) {
                     var json = data;
-                    if (typeof(data) != "object") {
+                    if (typeof (data) != "object") {
                         json = $.parseJSON(data);
                     }
                     if (json.ok) {
@@ -118,14 +118,14 @@
             });
         };
 
-        $.fn.OpenTerminal = function(options) {
+        $.fn.OpenTerminal = function (options) {
             if (options === undefined) {
                 options = {};
             }
             var wsaddr, $console = this;
             wsaddr = options.wsaddr === undefined ? "ws://127.0.0.1:8080/console" : options.wsaddr;
 
-            var resizeTerminal = function(t, c, r) {
+            var resizeTerminal = function (t, c, r) {
                 var appbar_height = $("#c-appbar").height();
                 var body_height = $(window).height();
                 var body_width = $(window).width();
@@ -134,7 +134,7 @@
                 t.resize(c, r);
             };
 
-            var getSize = function() {
+            var getSize = function () {
                 function getCharSize() {
                     var span = $("<span>", { text: "qwertyuiopasdfghjklzxcvbnm" });
                     $console.append(span);
@@ -173,7 +173,10 @@
             var term = null;
             var socket = new WebSocket(wsaddr + "?cols=" + cols + "&rows=" + rows);
 
-            socket.onopen = function() {
+            Terminal.applyAddon(fit);
+            Terminal.applyAddon(attach);
+
+            socket.onopen = function () {
                 term = new Terminal({
                     termName: "xterm",
                     cols: cols,
@@ -186,6 +189,8 @@
                     colors: Terminal.xtermColors
                 });
 
+                console.log(term);
+
                 term.attach(socket);
                 term._initialized = true;
 
@@ -194,22 +199,18 @@
 
                 resizeTerminal(term, cols, rows);
 
-                $(window).resize(function() {
+                $(window).resize(function () {
                     resizeTerminal(term, cols, rows);
                 });
 
-                term.on("title", function(title) {
+                term.on("title", function (title) {
                     $(document).prop("title", title);
-                });
-
-                term.on('paste', function(data, ev) {
-                    term.write(data);
                 });
 
                 window.term = term;
                 window.socket = socket;
             };
-            socket.onclose = function(e) {
+            socket.onclose = function (e) {
                 term.destroy();
                 var span = $("<span></span>");
                 span.text("网络中断（与服务器端连接已断开，请重新连接或联系管理员）。");
@@ -224,12 +225,12 @@
                 });
                 span.appendTo($console);
             };
-            socket.onerror = function(e) {
+            socket.onerror = function (e) {
                 console.log("Socket error:", e);
             };
         };
 
-        $.fn.loading = function(options) {
+        $.fn.loading = function (options) {
             if (options === undefined) {
                 options = {};
             }

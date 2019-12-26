@@ -1,12 +1,14 @@
 package website
 
 import (
+	"bufio"
 	"bytes"
-	"io"
 	"net"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
+	"unicode/utf8"
 
 	"apibox.club/utils"
 	"github.com/gorilla/websocket"
@@ -258,25 +260,49 @@ func SSHWebSocketHandler(w http.ResponseWriter, r *http.Request) {
 				defer func() {
 					done <- true
 				}()
-				rbuf := make([]byte, 1024)
-				for {
-					n, err := channel.Read(rbuf)
+				br := bufio.NewReader(channel)
+				buf := []byte{}
 
-					if io.EOF == err {
-						return
-					}
-					if err != nil {
-						apibox.Log_Err(err.Error())
-						return
-					}
-					if n > 0 {
-						err = ws.WriteMessage(websocket.TextMessage, rbuf[:n])
+				t := time.NewTimer(time.Millisecond * 100)
+				defer t.Stop()
+				r := make(chan rune)
+
+				go func() {
+					for {
+						x, size, err := br.ReadRune()
 						if err != nil {
-							apibox.Log_Err(err)
+							apibox.Log_Err(err.Error())
 							return
+						}
+						if size > 0 {
+							r <- x
+						}
+					}
+				}()
+
+				for {
+					select {
+					case <-t.C:
+						if len(buf) != 0 {
+							err = ws.WriteMessage(websocket.TextMessage, buf)
+							buf = []byte{}
+							if err != nil {
+								apibox.Log_Err(err.Error())
+								return
+							}
+						}
+						t.Reset(time.Millisecond * 100)
+					case d := <-r:
+						if d != utf8.RuneError {
+							p := make([]byte, utf8.RuneLen(d))
+							utf8.EncodeRune(p, d)
+							buf = append(buf, p...)
+						} else {
+							buf = append(buf, []byte("@")...)
 						}
 					}
 				}
+
 			}()
 			<-done
 		} else {
@@ -340,10 +366,11 @@ func (c *Console) ConsoleMainPage(w http.ResponseWriter, r *http.Request) {
 			user_name := strings.TrimSpace(de_vm_info_arr[0])
 			user_pwd := strings.TrimSpace(de_vm_info_arr[1])
 			vm_addr := strings.TrimSpace(de_vm_info_arr[2])
-                        vm_time := strings.TrimSpace(de_vm_info_arr[3])
+      vm_time := strings.TrimSpace(de_vm_info_arr[3])
 
 			now := time.Now()
 			start, _ := time.Parse(Time.RFC3339, vm_time)
+
 			url_timeout, err := time.ParseDuration(Conf.Web.UrlTimeout)
 			if nil != err {
 				url_timeout, _ = time.ParseDuration("60s")
@@ -375,10 +402,10 @@ func (c *Console) ConsoleLogin(w http.ResponseWriter, r *http.Request) {
 	user_name := ctx.GetFormValue("user_name")
 	user_pwd := ctx.GetFormValue("user_pwd")
 	vm_addr := ctx.GetFormValue("vm_addr")
-        vm_cid := ctx.GetFormValue("vm_cid")
+  vm_cid := ctx.GetFormValue("vm_cid")
 	vm_time := time.Now().Format(Time.RFC3339)
 
-        apibox.Log_Debug(user_name,user_pwd,vm_addr,vm_cid,vm_time)
+  apibox.Log_Debug(user_name,user_pwd,vm_addr,vm_cid,vm_time)
 
 	if vm_cid == "" {
 		vm_cid = "none"
@@ -415,7 +442,7 @@ func (c *Console) ConsoleLogin(w http.ResponseWriter, r *http.Request) {
 				ssh_info = append(ssh_info, user_name)
 				ssh_info = append(ssh_info, user_pwd)
 				ssh_info = append(ssh_info, vm_addr)
-                                ssh_info = append(ssh_info, vm_time)
+        ssh_info = append(ssh_info, vm_time)
 				ssh_info = append(ssh_info, vm_cid)
 				b64_ssh_info, err := apibox.AESEncode(strings.Join(ssh_info, "\n"), aesKey)
 				if nil != err {

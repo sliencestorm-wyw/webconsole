@@ -22,7 +22,6 @@ _testmain.go
 *.bak
 *.[568vq]
 [568vq].out
-bin/*
 bin/apibox
 
 .vscode/tasks.json

@@ -1,7 +1,7 @@
 /*!
- * Metro UI CSS v3.0.14 (http://metroui.org.ua)
- * Copyright 2012-2016 Sergey Pimenov
- * Licensed under MIT (http://metroui.org.ua/license.html)
+ * Metro UI CSS v3.0.18 (http://metroui.org.ua)
+ * Copyright 2012-2018 Sergey Pimenov
+ * Licensed under  ()
  */
 
 (function( factory ) {
@@ -15,14 +15,14 @@
 
 var $ = jQuery;
 
+window.METRO_VERSION = '3.0.18';
+
 // Source: js/requirements.js
 if (typeof jQuery === 'undefined') {
     throw new Error('Metro\'s JavaScript requires jQuery');
 }
 
 // Source: js/global.js
-window.METRO_VERSION = '3.0.13';
-
 if (window.METRO_AUTO_REINIT === undefined) window.METRO_AUTO_REINIT = true;
 if (window.METRO_LANGUAGE === undefined) window.METRO_LANGUAGE = 'en';
 if (window.METRO_LOCALE === undefined) window.METRO_LOCALE = 'EN_en';
@@ -33,24 +33,33 @@ if (window.METRO_CALENDAR_WEEK_START === undefined) window.METRO_CALENDAR_WEEK_S
 
 window.canObserveMutation = 'MutationObserver' in window;
 
-String.prototype.isUrl = function () {
-var regexp = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-    return regexp.test(this);
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
 };
 
-String.prototype.isColor = function () {
-return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(this);
-};
+// String.prototype.isUrl = function () {
+//     "use strict";
+//     var regexp = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+//     return regexp.test(this);
+// };
 
-window.secondsToFormattedString = function(time){
-    var hours, minutes, seconds;
+// String.prototype.isColor = function () {
+//     "use strict";
+//     return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(this);
+// };
 
-    hours = parseInt( time / 3600 ) % 24;
-    minutes = parseInt( time / 60 ) % 60;
-    seconds = time % 60;
-
-    return (hours ? (hours) + ":" : "") + (minutes < 10 ? "0"+minutes : minutes) + ":" + (seconds < 10 ? "0"+seconds : seconds);
-};
+// window.secondsToFormattedString = function(time){
+//     var hours, minutes, seconds;
+//
+//     hours = parseInt( time / 3600 ) % 24;
+//     minutes = parseInt( time / 60 ) % 60;
+//     seconds = time % 60;
+//
+//     return (hours ? (hours) + ":" : "") + (minutes < 10 ? "0"+minutes : minutes) + ":" + (seconds < 10 ? "0"+seconds : seconds);
+// };
 
 Array.prototype.shuffle = function () {
     var currentIndex = this.length, temporaryValue, randomIndex;
@@ -84,15 +93,16 @@ Array.prototype.unique = function () {
     return a;
 };
 
-window.uniqueId = function (prefix) {
-var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0;
-        d = Math.floor(d / 16);
-        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-    return uuid;
-};
+// window.uniqueId = function (prefix) {
+//     "use strict";
+//     var d = new Date().getTime();
+//     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+//         var r = (d + Math.random() * 16) % 16 | 0;
+//         d = Math.floor(d / 16);
+//         return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+//     });
+//     return uuid;
+// };
 
 window.isTouchDevice = function() {
     return (('ontouchstart' in window)
@@ -271,6 +281,32 @@ window.METRO_LOCALES = {
         ],
         buttons: [
             "วันนี้", "ล้าง", "ยกเลิก", "ช่วยเหลือ", "กลับ", "ต่อไป", "เสร็จ"
+        ]
+    },
+    'id': {
+        months: [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+            "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Dec"
+        ],
+        days: [
+            "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu",
+            "Mi", "Se", "Se", "Ra", "Ka", "Ju", "Sa"
+        ],
+        buttons: [
+            "Hari Ini", "Mengulang", "Batalkan", "Bantuan", "Sebelumnya", "Berikutnya", "Selesai"
+        ]
+    },
+    'hu': {
+        months: [
+            'Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December',
+            'Jan', 'Febr', 'Márc', 'Ápr', 'Máj', 'Jún', 'Júl', 'Aug', 'Szept', 'Okt', 'Nov', 'Dec'
+        ],
+        days: [
+            'Vasárnap', 'Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat',
+            'V', 'H', 'K', 'Sz', 'Cs', 'P', 'Sz'
+        ],
+        buttons: [
+            'Ma', 'Törlés', 'Mégse', 'Segítség', 'Előző', 'Következő', 'Vége'
         ]
     }
 };
@@ -941,175 +977,212 @@ var widget = $.widget;
 // Source: js/initiator.js
 $.fn.reverse = Array.prototype.reverse;
 
-$.Metro = function(params){
-    params = $.extend({
-    }, params);
-};
+$.Metro = {
 
-$.Metro.hotkeys = [];
+    hotkeys: [],
 
-$.Metro.initWidgets = function(){
-    var widgets = $("[data-role]");
-
-    var hotkeys = $("[data-hotkey]");
-    $.each(hotkeys, function(){
-        var element = $(this);
-        var hotkey = element.data('hotkey').toLowerCase();
-
-        //if ($.Metro.hotkeys.indexOf(hotkey) > -1) {
-        //    return;
-        //}
-        if (element.data('hotKeyBonded') === true ) {
-            return;
-        }
-
-        $.Metro.hotkeys.push(hotkey);
-
-        $(document).on('keyup', null, hotkey, function(e){
-            if (element === undefined) return;
-
-            if (element[0].tagName === 'A' &&
-                element.attr('href') !== undefined &&
-                element.attr('href').trim() !== '' &&
-                element.attr('href').trim() !== '#') {
-                document.location.href = element.attr('href');
-            } else {
-                element.click();
-            }
-            return false;
+    initWidgets: function(widgets) {
+        $.each(widgets, function () {
+            var $this = $(this), w = this;
+            var roles = $this.data('role').split(/\s*,\s*/);
+            roles.map(function (func) {
+                try {
+                    //$(w)[func]();
+                    if ($.fn[func] !== undefined && $this.data(func + '-initiated') !== true) {
+                        $.fn[func].call($this);
+                        $this.data(func + '-initiated', true);
+                    }
+                } catch (e) {
+                    if (window.METRO_DEBUG) {
+                        console.log(e.message, e.stack);
+                    }
+                }
+            });
         });
+    },
 
-        element.data('hotKeyBonded', true);
-    });
+    initHotkeys: function(hotkeys){
+        $.each(hotkeys, function(){
+            var element = $(this);
+            var hotkey = element.data('hotkey').toLowerCase();
 
-    $.each(widgets, function(){
-        var $this = $(this), w = this;
-        var roles = $this.data('role').split(/\s*,\s*/);
-        roles.map(function(func){
-            try {
-                //$(w)[func]();
-                if ($.fn[func] !== undefined && $this.data(func+'-initiated') !== true) {
-                    $.fn[func].call($this);
-                    $this.data(func+'-initiated', true);
-                }
-            } catch(e) {
-                if (window.METRO_DEBUG) {
-                    console.log(e.message, e.stack);
-                }
+            //if ($.Metro.hotkeys.indexOf(hotkey) > -1) {
+            //    return;
+            //}
+            if (element.data('hotKeyBonded') === true ) {
+                return;
             }
-        });
-    });
-};
 
-$.Metro.init = function(){
-    $.Metro.initWidgets();
+            $.Metro.hotkeys.push(hotkey);
 
-    if (window.METRO_AUTO_REINIT) {
-        if (!window.canObserveMutation) {
-            var originalDOM = $('body').html(),
-                actualDOM;
+            $(document).on('keyup', null, hotkey, function(e){
+                if (element === undefined) return;
 
-            setInterval(function () {
-                actualDOM = $('body').html();
-
-                if (originalDOM !== actualDOM) {
-                    originalDOM = actualDOM;
-
-                    $.Metro.initWidgets();
+                if (element[0].tagName === 'A' &&
+                    element.attr('href') !== undefined &&
+                    element.attr('href').trim() !== '' &&
+                    element.attr('href').trim() !== '#') {
+                    document.location.href = element.attr('href');
+                } else {
+                    element.click();
                 }
-            }, 100);
-        } else {
-            var observer, observerOptions, observerCallback;
-            observerOptions = {
-                'childList': true,
-                'subtree': true
-            };
-            observerCallback = function(mutations){
+                return false;
+            });
 
-                //console.log(mutations);
+            element.data('hotKeyBonded', true);
+        });
+    },
 
-                mutations.map(function(record){
+    init: function(){
+        var widgets = $("[data-role]");
+        var hotkeys = $("[data-hotkey]");
 
-                    if (record.addedNodes) {
 
-                        /*jshint loopfunc: true */
-                        var obj, widgets, plugins, hotkeys;
+        $.Metro.initHotkeys(hotkeys);
+        $.Metro.initWidgets(widgets);
 
-                        for(var i = 0, l = record.addedNodes.length; i < l; i++) {
-                            obj = $(record.addedNodes[i]);
+        var observer, observerOptions, observerCallback;
 
-                            plugins = obj.find("[data-role]");
+        observerOptions = {
+            'childList': true,
+            'subtree': true
+        };
 
-                            hotkeys = obj.find("[data-hotkey]");
+        observerCallback = function(mutations){
 
-                            $.each(hotkeys, function(){
-                                var element = $(this);
-                                var hotkey = element.data('hotkey').toLowerCase();
+            //console.log(mutations);
 
-                                //if ($.Metro.hotkeys.indexOf(hotkey) > -1) {
-                                //    return;
-                                //}
+            mutations.map(function(record){
 
-                                if (element.data('hotKeyBonded') === true ) {
-                                    return;
-                                }
+                if (record.addedNodes) {
 
-                                $.Metro.hotkeys.push(hotkey);
+                    /*jshint loopfunc: true */
+                    var obj, widgets, plugins, hotkeys;
 
-                                $(document).on('keyup', null, hotkey, function () {
-                                    if (element === undefined) return;
+                    for(var i = 0, l = record.addedNodes.length; i < l; i++) {
+                        obj = $(record.addedNodes[i]);
 
-                                    if (element[0].tagName === 'A' &&
-                                        element.attr('href') !== undefined &&
-                                        element.attr('href').trim() !== '' &&
-                                        element.attr('href').trim() !== '#') {
-                                        document.location.href = element.attr('href');
-                                    } else {
-                                        element.click();
-                                    }
-                                    return false;
-                                });
+                        plugins = obj.find("[data-role]");
 
-                                element.data('hotKeyBonded', true);
-                                //console.log($.Metro.hotkeys);
-                            });
+                        hotkeys = obj.find("[data-hotkey]");
 
-                            if (obj.data('role') !== undefined) {
-                                widgets = $.merge(plugins, obj);
-                            } else {
-                                widgets = plugins;
-                            }
+                        $.Metro.initHotkeys(hotkeys);
 
-                            if (widgets.length) {
-                                $.each(widgets, function(){
-                                    var _this = $(this);
-                                    var roles = _this.data('role').split(/\s*,\s*/);
-                                    roles.map(function(func){
-                                        try {
-                                            if ($.fn[func] !== undefined && _this.data(func+'-initiated') !== true) {
-                                                $.fn[func].call(_this);
-                                                _this.data(func+'-initiated', true);
-                                            }
-                                        } catch(e) {
-                                            if (window.METRO_DEBUG) {
-                                                console.log(e.message, e.stack);
-                                            }
-                                        }
-                                    });
-                                });
-                            }
+                        if (obj.data('role') !== undefined) {
+                            widgets = $.merge(plugins, obj);
+                        } else {
+                            widgets = plugins;
+                        }
+
+                        if (widgets.length) {
+                            $.Metro.initWidgets(widgets);
                         }
                     }
-                });
-            };
+                }
+            });
+        };
 
-            //console.log($(document));
-            observer = new MutationObserver(observerCallback);
-            observer.observe(document, observerOptions);
+        //console.log($(document));
+        observer = new MutationObserver(observerCallback);
+        observer.observe(document, observerOptions);
+    }
+};
+// Source: js/utils/core-utils.js
+var utils = {
+    isColor: function(val){
+        return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(val);
+    },
+
+    isUrl: function(val){
+        return /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(this);
+    },
+
+    secondsToFormattedString: function(time){
+        var hours, minutes, seconds;
+
+        hours = parseInt( time / 3600 ) % 24;
+        minutes = parseInt( time / 60 ) % 60;
+        seconds = time % 60;
+
+        return (hours ? (hours) + ":" : "") + (minutes < 10 ? "0"+minutes : minutes) + ":" + (seconds < 10 ? "0"+seconds : seconds);
+    },
+
+    uniqueId: function (prefix) {
+var d = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        return uuid;
+    },
+
+    isTouchDevice: function() {
+        return (('ontouchstart' in window)
+        || (navigator.MaxTouchPoints > 0)
+        || (navigator.msMaxTouchPoints > 0));
+    },
+
+    arrayUnique: function (array) {
+        var a = array.concat();
+        for (var i = 0; i < a.length; ++i) {
+            for (var j = i + 1; j < a.length; ++j) {
+                if (a[i] === a[j])
+                    a.splice(j--, 1);
+            }
         }
+
+        return a;
+    },
+
+    arrayClone: function(array){
+        return array.slice(0);
+    },
+
+    arrayShuffle: function (array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+
+        while (0 !== currentIndex) {
+
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+    },
+
+    hex2rgba: function(hex, alpha){
+        var c;
+        alpha = isNaN(alpha) ? 1 : alpha;
+        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+            c= hex.substring(1).split('');
+            if(c.length== 3){
+                c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c= '0x'+c.join('');
+            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+alpha+')';
+        }
+        throw new Error('Hex2rgba error. Bad Hex value');
+    },
+
+    random: function(from, to){
+        return Math.floor(Math.random()*(to-from+1)+from);
+    },
+
+    isInt: function(n){
+        return Number(n) === n && n % 1 === 0;
+    },
+
+    isFloat: function(n){
+        return Number(n) === n && n % 1 !== 0;
     }
 };
 
+$.metroUtils = window.metroUtils = utils;
 // Source: js/utils/easing.js
 	$.easing['jswing'] = $.easing['swing'];
 
@@ -1638,6 +1711,47 @@ function touch2Mouse(e) {
     e.preventDefault();
 }
 
+// Source: js/utils/tpl.js
+// var template =
+//     'My skills:' +
+//     '<%if(this.showSkills) {%>' +
+//     '<%for(var index in this.skills) {%>' +
+//     '<a href="#"><%this.skills[index]%></a>' +
+//     '<%}%>' +
+//     '<%} else {%>' +
+//     '<p>none</p>' +
+//     '<%}%>';
+//     console.log(TemplateEngine(template, {
+//     skills: ["js", "html", "css"],
+//     showSkills: true
+// }));
+
+var TemplateEngine = function(html, options) {
+    var re = /<%(.+?)%>/g,
+        reExp = /(^( )?(var|if|for|else|switch|case|break|{|}|;))(.*)?/g,
+        code = 'with(obj) { var r=[];\n',
+        cursor = 0,
+        result,
+        match;
+    var add = function(line, js) {
+        js? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
+            (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+        return add;
+    };
+    while(match = re.exec(html)) {
+        add(html.slice(cursor, match.index))(match[1], true);
+        cursor = match.index + match[0].length;
+    }
+    add(html.substr(cursor, html.length - cursor));
+    code = (code + 'return r.join(""); }').replace(/[\r\t\n]/g, ' ');
+    try { result = new Function('obj', code).apply(options, [options]); }
+    catch(err) { console.error("'" + err.message + "'", " in \n\nCode:\n", code, "\n"); }
+    return result;
+};
+
+window.metroTemplate = TemplateEngine;
+
+$.Template = TemplateEngine;
 // Source: js/widgets/accordion.js
 $.widget("metro.accordion", {
 
@@ -2144,16 +2258,18 @@ $.widget("metro.accordion", {
                     //===  EVENTS =================================================
 
                     //activate the click event for the pull button
-                    $(that.pullButton).on("click", function () {
+                    $(that.pullButton).on("click", function (e) {
 
                         //who am i?
                         that = $(this).closest("[data-role=appbar]").data("appbar");
 
                         //we show /hide the pullmenu
-                        if ($(that.pullMenu).is(":hidden")) {
+                        if ($(that.pullMenu).length !== 0 && $(that.pullMenu).is(":hidden")) {
                             $(that.pullMenu).show();
                             $(that.pullMenu).find(".app-bar-pullmenubar")
                                     .hide().not(".hidden").slideDown("fast");
+                            e.preventDefault();
+                            e.stopPropagation();
                         } else {
                             $(that.pullMenu).find(".app-bar-pullmenubar")
                                     .not(".hidden").show().slideUp("fast", function () {
@@ -2163,30 +2279,6 @@ $.widget("metro.accordion", {
 
                     });
 
-
-                    //we have to calculate everything new, if the user resizes or zooms the window
-                    $(window).resize(function () {
-                        $("[data-role=appbar]:not(.no-flexible)").each(function () {
-                            $(this).data("appbar").resize();
-                        });
-                    });
-
-
-                    //because fonts(also icon-fonts) are often loaded async after the page has loaded and this script walked through already, 
-                    //we have to check again after these elements loaded. Because there is no way to observe only specific elements, we do it for the window
-                    $(window).load(function () {
-                        $("[data-role=appbar]:not(.no-flexible)").each(function () {
-                            $(this).data("appbar").resize();
-                        });
-                    });
-
-                    //pictures (or other outside stuff was loaded - pictures are also often loaded async or have a lazy load or are injected after a while. 
-                    //a picture can change a size of the element from the appbar, so we must recheck it again.
-                    $("[data-role=appbar]:not(.no-flexible) [src]").on("load", function () {
-                        //who am i?
-                        var appbar = $(this).closest("[data-role=appbar]").data("appbar");
-                        appbar.resize();
-                    });
                 }
             }
 
@@ -2196,6 +2288,30 @@ $.widget("metro.accordion", {
         _setOption: function (key, value) {
             this._super('_setOption', key, value);
         }
+    });
+
+    //we have to calculate everything new, if the user resizes or zooms the window
+    $(window).on('resize', function () {
+        $("[data-role=appbar]:not(.no-flexible)").each(function () {
+            $(this).data("appbar").resize();
+        });
+    });
+
+
+    //because fonts(also icon-fonts) are often loaded async after the page has loaded and this script walked through already,
+    //we have to check again after these elements loaded. Because there is no way to observe only specific elements, we do it for the window
+    $(window).on('load', function () {
+        $("[data-role=appbar]:not(.no-flexible)").each(function () {
+            $(this).data("appbar").resize();
+        });
+    });
+
+    //pictures (or other outside stuff was loaded - pictures are also often loaded async or have a lazy load or are injected after a while.
+    //a picture can change a size of the element from the appbar, so we must recheck it again.
+    $("[data-role=appbar]:not(.no-flexible) [src]").on("load", function () {
+        //who am i?
+        var appbar = $(this).closest("[data-role=appbar]").data("appbar");
+        appbar.resize();
     });
 
 // Source: js/widgets/audio-player.js
@@ -2525,7 +2641,7 @@ $.widget( "metro.audio" , {
 
         audio.on('loadedmetadata', function(){
             element.data('duration', audio_obj.duration.toFixed(0));
-            info_box.html("00:00" + " / " + secondsToFormattedString(element.data('duration')) );
+            info_box.html("00:00" + " / " + metroUtils.secondsToFormattedString(element.data('duration')) );
         });
 
         audio.on("canplay", function(){
@@ -2571,7 +2687,7 @@ $.widget( "metro.audio" , {
         var info_box = element.find(".controls .info-box");
         var currentTime = Math.round(audio_obj.currentTime);
 
-        info_box.html(secondsToFormattedString(currentTime) + " / " + secondsToFormattedString(element.data('duration')));
+        info_box.html(metroUtils.secondsToFormattedString(currentTime) + " / " + metroUtils.secondsToFormattedString(element.data('duration')));
     },
 
     _setStreamSliderPosition: function(){
@@ -2969,7 +3085,7 @@ $.widget("metro.calendar", {
             }
         }
 
-        var totalDays = ["31", "" + feb + "", "31", "30", "31", "30", "31", "31", "30", "31", "30", "31"];
+        var totalDays = [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
         var daysInMonth = totalDays[month];
         
         var first_week_day = this._dateFromNumbers(year, month + 1, 1).getDay();
@@ -2991,7 +3107,7 @@ $.widget("metro.calendar", {
         $("<div/>").addClass("calendar-cell align-center").html("<a class='btn-previous-year' href='#'>-</a>").appendTo(tr);
         $("<div/>").addClass("calendar-cell align-center").html("<a class='btn-previous-month' href='#'>&#12296;</a>").appendTo(tr);
 
-        $("<div/>").addClass("calendar-cell sel-month align-center").html("<a class='btn-select-month' href='#'>" + this.locales[o.locale].months[month] + ' ' + year + "</a>").appendTo(tr);
+        $("<div/>").addClass("calendar-cell sel-month align-center").html("<a class='btn-select-month' href='#'>" + this.locales[o.locale].months[month + 12] + ' ' + year + "</a>").appendTo(tr);
 
         $("<div/>").addClass("calendar-cell align-center").html("<a class='btn-next-month' href='#'>&#12297;</a>").appendTo(tr);
         $("<div/>").addClass("calendar-cell align-center").html("<a class='btn-next-year' href='#'>+</a>").appendTo(tr);
@@ -3197,13 +3313,13 @@ $.widget("metro.calendar", {
             table = this.element.find('.calendar-grid');
 
         if (this._mode === 'day') {
-            table.find('.btn-select-month').on('click', function (e) {
+            table.find('.btn-select-month').off('click').on('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 that._mode = 'month';
                 that._renderCalendar();
             });
-            table.find('.btn-previous-month').on('click', function (e) {
+            table.find('.btn-previous-month').off('click').on('click', function (e) {
                 that._event = 'eventPrevious';
                 e.preventDefault();
                 e.stopPropagation();
@@ -3214,7 +3330,7 @@ $.widget("metro.calendar", {
                 }
                 that._renderCalendar();
             });
-            table.find('.btn-next-month').on('click', function (e) {
+            table.find('.btn-next-month').off('click').on('click', function (e) {
                 that._event = 'eventNext';
                 e.preventDefault();
                 e.stopPropagation();
@@ -3225,14 +3341,14 @@ $.widget("metro.calendar", {
                 }
                 that._renderCalendar();
             });
-            table.find('.btn-previous-year').on('click', function (e) {
+            table.find('.btn-previous-year').off('click').on('click', function (e) {
                 that._event = 'eventPrevious';
                 e.preventDefault();
                 e.stopPropagation();
                 that._year -= 1;
                 that._renderCalendar();
             });
-            table.find('.btn-next-year').on('click', function (e) {
+            table.find('.btn-next-year').off('click').on('click', function (e) {
                 that._event = 'eventNext';
                 e.preventDefault();
                 e.stopPropagation();
@@ -3278,7 +3394,7 @@ $.widget("metro.calendar", {
                 }
             });
         } else if (this._mode === 'month') {
-            table.find('.month a').on('click', function (e) {
+            table.find('.month a').off('click').on('click', function (e) {
                 that._event = 'eventNext';
                 e.preventDefault();
                 e.stopPropagation();
@@ -3286,21 +3402,21 @@ $.widget("metro.calendar", {
                 that._mode = 'day';
                 that._renderCalendar();
             });
-            table.find('.btn-previous-year').on('click', function (e) {
+            table.find('.btn-previous-year').off('click').on('click', function (e) {
                 that._event = 'eventPrevious';
                 e.preventDefault();
                 e.stopPropagation();
                 that._year -= 1;
                 that._renderCalendar();
             });
-            table.find('.btn-next-year').on('click', function (e) {
+            table.find('.btn-next-year').off('click').on('click', function (e) {
                 that._event = 'eventNext';
                 e.preventDefault();
                 e.stopPropagation();
                 that._year += 1;
                 that._renderCalendar();
             });
-            table.find('.btn-select-year').on('click', function (e) {
+            table.find('.btn-select-year').off('click').on('click', function (e) {
                 that._event = 'eventNext';
                 e.preventDefault();
                 e.stopPropagation();
@@ -3308,7 +3424,7 @@ $.widget("metro.calendar", {
                 that._renderCalendar();
             });
         } else {
-            table.find('.year a').on('click', function (e) {
+            table.find('.year a').off('click').on('click', function (e) {
                 that._event = 'eventNext';
                 e.preventDefault();
                 e.stopPropagation();
@@ -3316,14 +3432,14 @@ $.widget("metro.calendar", {
                 that._mode = 'month';
                 that._renderCalendar();
             });
-            table.find('.btn-previous-year').on('click', function (e) {
+            table.find('.btn-previous-year').off('click').on('click', function (e) {
                 that._event = 'eventPrevious';
                 e.preventDefault();
                 e.stopPropagation();
                 that._distance -= 10;
                 that._renderCalendar();
             });
-            table.find('.btn-next-year').on('click', function (e) {
+            table.find('.btn-next-year').off('click').on('click', function (e) {
                 that._event = 'eventNext';
                 e.preventDefault();
                 e.stopPropagation();
@@ -3332,7 +3448,7 @@ $.widget("metro.calendar", {
             });
         }
 
-        table.find('.calendar-btn-today').on('click', function (e) {
+        table.find('.calendar-btn-today').off('click').on('click', function (e) {
             //that._event = 'eventNext';
             e.preventDefault();
             e.stopPropagation();
@@ -3343,7 +3459,7 @@ $.widget("metro.calendar", {
             that._day = that.options.date.getDate();
             that._renderCalendar();
         });
-        table.find('.calendar-btn-clear').on('click', function (e) {
+        table.find('.calendar-btn-clear').off('click').on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             that.options.date = new Date();
@@ -3860,31 +3976,51 @@ $.widget( "metro.charm" , {
             size = element.outerWidth();
             if (o.position === "left") {
                 element.css({
-                    left: -size
+                    left: -size,
+                    right: 'auto',
+                    top: 0,
+                    bottom: 0
                 }).show().animate({
                     left: 0
-                }, o.duration);
+                }, o.duration, function(){
+                    element.data("displayed", true);
+                });
             } else {
                 element.css({
-                    right: -size
+                    right: -size,
+                    left: 'auto',
+                    top: 0,
+                    bottom: 0
                 }).show().animate({
                     right: 0
-                }, o.duration);
+                }, o.duration, function(){
+                    element.data("displayed", true);
+                });
             }
         } else {
             size = element.outerHeight();
             if (o.position === "top") {
                 element.css({
-                    top: -size
+                    top: -size,
+                    bottom: 'auto',
+                    left: 0,
+                    right: 0
                 }).show().animate({
                     top: 0
-                }, o.duration);
+                }, o.duration, function(){
+                    element.data("displayed", true);
+                });
             } else {
                 element.css({
-                    bottom: -size
+                    bottom: -size,
+                    top: 'auto',
+                    left: 0,
+                    right: 0
                 }).show().animate({
                     bottom: 0
-                }, o.duration);
+                }, o.duration, function(){
+                    element.data("displayed", true);
+                });
             }
         }
 
@@ -3909,12 +4045,14 @@ $.widget( "metro.charm" , {
                     left: -size
                 }, o.duration, function(){
                     element.hide();
+                    element.data("displayed", false);
                 });
             } else {
                 element.animate({
                     right: -size
                 }, o.duration, function(){
                     element.hide();
+                    element.data("displayed", false);
                 });
             }
         } else {
@@ -3924,12 +4062,14 @@ $.widget( "metro.charm" , {
                     top: -size
                 }, o.duration, function(){
                     element.hide();
+                    element.data("displayed", false);
                 });
             } else {
                 element.animate({
                     bottom: -size
                 }, o.duration, function(){
                     element.hide();
+                    element.data("displayed", false);
                 });
             }
         }
@@ -3967,6 +4107,207 @@ $.widget( "metro.charm" , {
         this._super('_setOption', key, value);
     }
 });
+
+// $(document).on("click", ".charm", function(e){
+//     e.preventDefault();
+//     e.stopPropagation();
+// });
+//
+// $(document).on('click', function(e){
+//     $('[data-role=charm]').each(function(i, el){
+//         if (!$(el).hasClass('keep-open') && $(el).data('displayed')===true) {
+//             $(el).data('charm').close();
+//         }
+//     });
+// });
+
+var metroCharm = {
+    isOpened: function(el){
+        var charm = $(el), charm_obj;
+        if (charm.length == 0) {
+            console.log('Charm ' + el + ' not found!');
+            return false;
+        }
+
+        charm_obj = charm.data('charm');
+
+        if (charm_obj == undefined) {
+            console.log('Element not contain role charm! Please add attribute data-role="charm" to element ' + el);
+            return false;
+        }
+
+        return charm_obj.element.data('opened') === true;
+    },
+
+    show: function(el, position){
+        var charm = $(el), charm_obj;
+        if (charm.length == 0) {
+            console.log('Charm ' + el + ' not found!');
+            return false;
+        }
+
+        charm_obj = charm.data('charm');
+
+        if (charm_obj == undefined) {
+            console.log('Element not contain role charm! Please add attribute data-role="charm" to element ' + el);
+            return false;
+        }
+
+        if (position != undefined) {
+
+            charm.hide();
+            charm.data("displayed", false);
+            charm.data("opened", false);
+
+            charm_obj.options.position = position;
+        }
+
+        charm_obj.open();
+
+        return false;
+    },
+
+    hide: function(el){
+        var charm = $(el), charm_obj;
+        if (charm.length == 0) {
+            console.log('Charm ' + el + ' not found!');
+            return false;
+        }
+
+        charm_obj = charm.data('charm');
+
+        if (charm_obj == undefined) {
+            console.log('Element not contain role charm! Please add attribute data-role="charm" to element ' + el);
+            return false;
+        }
+
+        charm_obj.close();
+    },
+
+    close: function(el){
+        return this.show(el);
+    },
+
+    toggle: function(el, position){
+        var charm = $(el), charm_obj;
+        if (charm.length == 0) {
+            console.log('Charm ' + el + ' not found!');
+            return false;
+        }
+
+        charm_obj = charm.data('charm');
+
+        if (charm_obj == undefined) {
+            console.log('Element not contain role charm! Please add attribute data-role="charm" to element ' + el);
+            return false;
+        }
+
+        if (charm_obj.element.data('opened') === true) {
+            charm_obj.close();
+        } else {
+            if (position != undefined) {
+                charm.hide();
+                charm.data("displayed", false);
+                charm.data("opened", false);
+
+                charm_obj.options.position = position;
+            }
+            charm_obj.open();
+        }
+    }
+};
+
+$.Charm = window.metroCharm = metroCharm;
+
+window.metroCharmIsOpened = function(el){
+    var charm = $(el), charm_obj;
+    if (charm.length == 0) {
+        console.log('Charm ' + el + ' not found!');
+        return false;
+    }
+
+    charm_obj = charm.data('charm');
+
+    if (charm_obj == undefined) {
+        console.log('Element not contain role charm! Please add attribute data-role="charm" to element ' + el);
+        return false;
+    }
+
+    return charm_obj.element.data('opened') === true;
+};
+
+window.showMetroCharm = function (el, position){
+    var charm = $(el), charm_obj;
+    if (charm.length == 0) {
+        console.log('Charm ' + el + ' not found!');
+        return false;
+    }
+
+    charm_obj = charm.data('charm');
+
+    if (charm_obj == undefined) {
+        console.log('Element not contain role charm! Please add attribute data-role="charm" to element ' + el);
+        return false;
+    }
+
+    if (position != undefined) {
+
+        charm.hide();
+        charm.data("displayed", false);
+        charm.data("opened", false);
+
+        charm_obj.options.position = position;
+    }
+
+    charm_obj.open();
+
+    return false;
+};
+
+window.hideMetroCharm = function(el){
+    var charm = $(el), charm_obj;
+    if (charm.length == 0) {
+        console.log('Charm ' + el + ' not found!');
+        return false;
+    }
+
+    charm_obj = charm.data('charm');
+
+    if (charm_obj == undefined) {
+        console.log('Element not contain role charm! Please add attribute data-role="charm" to element ' + el);
+        return false;
+    }
+
+    charm_obj.close();
+};
+
+window.toggleMetroCharm = function(el, position){
+    var charm = $(el), charm_obj;
+    if (charm.length == 0) {
+        console.log('Charm ' + el + ' not found!');
+        return false;
+    }
+
+    charm_obj = charm.data('charm');
+
+    if (charm_obj == undefined) {
+        console.log('Element not contain role charm! Please add attribute data-role="charm" to element ' + el);
+        return false;
+    }
+
+    if (charm_obj.element.data('opened') === true) {
+        charm_obj.close();
+    } else {
+        if (position != undefined) {
+            charm.hide();
+            charm.data("displayed", false);
+            charm.data("opened", false);
+
+            charm_obj.options.position = position;
+        }
+        charm_obj.open();
+    }
+};
 
 // Source: js/widgets/clock.js
 $.widget( "metro.clock" , {
@@ -4175,7 +4516,11 @@ $.widget( "metro.countdown" , {
             p = $("<div/>").addClass('part ' + v).attr('data-day-text', o.labels[v]).appendTo(element);
             $("<div/>").addClass('digit').appendTo(p);
             $("<div/>").addClass('digit').appendTo(p);
-            if (o.labelColor.isColor()) {
+            if (v === 'days') {
+                $("<div/>").addClass('digit').appendTo(p);
+                $("<div/>").addClass('digit').appendTo(p);
+            }
+            if (metroUtils.isColor(o.labelColor)) {
                 p.css({
                     color: o.labelColor
                 });
@@ -4183,7 +4528,7 @@ $.widget( "metro.countdown" , {
                 p.addClass(o.labelColor);
             }
 
-            if (o.backgroundColor.isColor()) {
+            if (metroUtils.isColor(o.backgroundColor)) {
                 p.find('.digit').css({
                     background: o.backgroundColor
                 });
@@ -4191,7 +4536,7 @@ $.widget( "metro.countdown" , {
                 p.find('.digit').addClass(o.backgroundColor);
             }
 
-            if (o.digitColor.isColor()) {
+            if (metroUtils.isColor(o.digitColor)) {
                 p.find('.digit').css({
                     color: o.digitColor
                 });
@@ -4201,7 +4546,7 @@ $.widget( "metro.countdown" , {
 
             if (v !== 'seconds') {
                 d = $("<div/>").addClass("divider").text(':').appendTo(element);
-                if (o.dividerColor.isColor()) {
+                if (metroUtils.isColor(o.dividerColor)) {
                     d.css({'color': o.dividerColor});
                 } else {
                     d.addClass(o.dividerColor);
@@ -4298,25 +4643,69 @@ $.widget( "metro.countdown" , {
 
     _update: function(part, value){
         var element = this.element;
-        var major_value = Math.floor(value/10)%10;
-        var minor_value = value%10;
-        var major_digit, minor_digit;
 
-        major_digit = element.find("."+part+" .digit:eq(0)");
-        minor_digit = element.find("."+part+" .digit:eq(1)");
+        if (part == 'days') {
+            var value1 = Math.floor(value/1000)%10;
+            var value2 = Math.floor(value/100)%10;
+            var value3 = Math.floor(value/10)%10;
+            var value4 = value%10;
+            var digit1, digit2, digit3, digit4;
 
-        if (minor_value !== parseInt(minor_digit.text())) {
-            minor_digit.toggleClass('scaleIn');
-            setTimeout(function(){
-                minor_digit.text(minor_value).toggleClass('scaleIn');
-            }, 500);
+            digit1 = element.find("."+part+" .digit:eq(0)");
+            digit2 = element.find("."+part+" .digit:eq(1)");
+            digit3 = element.find("."+part+" .digit:eq(2)");
+            digit4 = element.find("."+part+" .digit:eq(3)");
+
+            if (value1 !== parseInt(digit1.text())) {
+                digit1.toggleClass('scaleIn');
+                setTimeout(function(){
+                    digit1.text(value1).toggleClass('scaleIn');
+                }, 500);
+            }
+
+            if (value2 !== parseInt(digit2.text())) {
+                digit2.toggleClass('scaleIn');
+                setTimeout(function(){
+                    digit2.text(value2).toggleClass('scaleIn');
+                }, 500);
+            }
+
+            if (value3 !== parseInt(digit3.text())) {
+                digit3.toggleClass('scaleIn');
+                setTimeout(function(){
+                    digit3.text(value3).toggleClass('scaleIn');
+                }, 500);
+            }
+
+            if (value4 !== parseInt(digit4.text())) {
+                digit4.toggleClass('scaleIn');
+                setTimeout(function(){
+                    digit4.text(value4).toggleClass('scaleIn');
+                }, 500);
+            }
+
+        } else {
+            var major_value = Math.floor(value/10)%10;
+            var minor_value = value%10;
+            var major_digit, minor_digit;
+
+            major_digit = element.find("."+part+" .digit:eq(0)");
+            minor_digit = element.find("."+part+" .digit:eq(1)");
+
+            if (minor_value !== parseInt(minor_digit.text())) {
+                minor_digit.toggleClass('scaleIn');
+                setTimeout(function(){
+                    minor_digit.text(minor_value).toggleClass('scaleIn');
+                }, 500);
+            }
+            if (major_value !== parseInt(major_digit.text())) {
+                major_digit.toggleClass('scaleIn');
+                setTimeout(function(){
+                    major_digit.text(major_value).toggleClass('scaleIn');
+                }, 500);
+            }
         }
-        if (major_value !== parseInt(major_digit.text())) {
-            major_digit.toggleClass('scaleIn');
-            setTimeout(function(){
-                major_digit.text(major_value).toggleClass('scaleIn');
-            }, 500);
-        }
+
     },
 
     _stop: function(){
@@ -4601,9 +4990,8 @@ $.widget( "metro.dialog" , {
         show: false,
         href: false,
         contentType: 'default', // video
-
-        _interval: undefined,
-        _overlay: undefined,
+        closeAction: true,
+        closeElement: ".js-dialog-close",
 
         onDialogOpen: function(dialog){},
         onDialogClose: function(dialog){}
@@ -4622,11 +5010,22 @@ $.widget( "metro.dialog" , {
             }
         });
 
+        this._interval = undefined;
+        this._overlay = undefined;
+
+
         if (o.overlay) {
             this._createOverlay();
         }
         this._createDialog();
 
+        if (o.closeAction === true) {
+            element.on("click", ".js-dialog-close" + o.closeElement, function(){
+                that.close();
+            });
+        }
+
+        element.appendTo($('body'));
         element.data('dialog', this);
 
         if (o.show) {
@@ -4643,7 +5042,7 @@ $.widget( "metro.dialog" , {
         }
 
         if (o.overlayColor) {
-            if (o.overlayColor.isColor()) {
+            if (metroUtils.isColor(o.overlayColor)) {
                 overlay.css({
                     background: o.overlayColor
                 });
@@ -4652,7 +5051,7 @@ $.widget( "metro.dialog" , {
             }
         }
 
-        o._overlay = overlay;
+        this._overlay = overlay;
     },
 
     _createDialog: function(){
@@ -4674,7 +5073,7 @@ $.widget( "metro.dialog" , {
         }
 
         if (o.background !== 'default') {
-            if (o.background.isColor()) {
+            if (metroUtils.isColor(o.background)) {
                 element.css({
                     background: o.background
                 });
@@ -4684,7 +5083,7 @@ $.widget( "metro.dialog" , {
         }
 
         if (o.color !== 'default') {
-            if (o.color.isColor()) {
+            if (metroUtils.isColor(o.color)) {
                 element.css({
                     color: o.color
                 });
@@ -4708,10 +5107,13 @@ $.widget( "metro.dialog" , {
     },
 
     _hide: function(){
-        var element = this.element;
+        var element = this.element, o = this.options;
         element.css({
            visibility: "hidden"
         });
+        if (o.removeOnClose === true) {
+            element.remove();
+        }
     },
 
     _show: function(){
@@ -4726,8 +5128,8 @@ $.widget( "metro.dialog" , {
 
     _setPosition: function(){
         var that = this, element = this.element, o = this.options;
-        var width = element.width(),
-            height = element.height();
+        var width = element.outerWidth(),
+            height = element.outerHeight();
 
         switch (o.place) {
             case 'top-left': {
@@ -4807,12 +5209,19 @@ $.widget( "metro.dialog" , {
             return false;
         }
 
-        element.find('.set-dialog-content').remove();
+        element.children(":not(.dialog-close-button)").remove();
+        //element.find('.set-dialog-content').remove();
 
         content.appendTo(element);
 
         if (o.content) {
-            content.html(o.content);
+
+            if (o.content instanceof jQuery) {
+                o.content.appendTo(content);
+            } else {
+                content.html(o.content);
+            }
+
             this._setPosition();
         }
 
@@ -4826,6 +5235,31 @@ $.widget( "metro.dialog" , {
             );
         }
 
+    },
+
+    setContent: function(content){
+        this.options.contentType = "default";
+        this.options.href = false;
+        this.options.content = content;
+        this._setContent();
+    },
+
+    setContentHref: function(href){
+        this.options.contentType = "href";
+        this.options.content = false;
+        this.options.href = href;
+        this._setContent();
+    },
+
+    setContentVideo: function(content){
+        this.options.contentType = "video";
+        this.options.content = content;
+        this.options.href = false;
+        this._setContent();
+    },
+
+    isOpened: function(){
+        return this.element.data('opened') === true;
     },
 
     toggle: function(){
@@ -4846,7 +5280,7 @@ $.widget( "metro.dialog" , {
         element.data('opened', true);
 
         if (o.overlay) {
-            overlay = o._overlay;
+            overlay = this._overlay;
             overlay.appendTo('body').show();
             if (o.overlayClickClose) {
                 overlay.on('click', function(){
@@ -4870,7 +5304,7 @@ $.widget( "metro.dialog" , {
         }
 
         if (o.hide && parseInt(o.hide) > 0) {
-            o._interval = setTimeout(function(){
+            this._interval = setTimeout(function(){
                 that.close();
             }, parseInt(o.hide));
         }
@@ -4879,7 +5313,7 @@ $.widget( "metro.dialog" , {
     close: function(){
         var that = this, element = this.element, o = this.options;
 
-        clearInterval(o._interval);
+        clearInterval(this._interval);
 
         if (o.overlay) {
             $('body').find('.dialog-overlay').remove();
@@ -4918,67 +5352,274 @@ $.widget( "metro.dialog" , {
 });
 
 
-window.showMetroDialog = function (el, place){
-    var dialog = $(el), dialog_obj;
-    if (dialog.length == 0) {
-        console.log('Dialog ' + el + ' not found!');
-        return false;
-    }
+var dialog = {
+    isDialog: function(el){
+        var dialog = $(el), dialog_obj;
+        if (dialog.length == 0) {
+            console.log('Dialog ' + el + ' not found!');
+            return false;
+        }
 
-    dialog_obj = dialog.data('dialog');
+        dialog_obj = dialog.data('dialog');
 
-    if (dialog_obj == undefined) {
-        console.log('Element not contain role dialog! Please add attribute data-role="dialog" to element ' + el);
-        return false;
-    }
+        if (dialog_obj == undefined) {
+            console.log('Element not contain role dialog! Please add attribute data-role="dialog" to element ' + el);
+            return false;
+        }
 
-    if (place !== undefined) {
-        dialog_obj.options.place = place;
-    }
+        return true;
+    },
 
-    dialog_obj.open();
-};
+    open: function(el, place, content, contentType){
+        var dialog = $(el), dialog_obj = dialog.data('dialog');
 
-window.hideMetroDialog = function(el){
-    var dialog = $(el), dialog_obj;
-    if (dialog.length == 0) {
-        console.log('Dialog ' + el + ' not found!');
-        return false;
-    }
+        if (!this.isDialog(el)) {
+            return false;
+        }
 
-    dialog_obj = dialog.data('dialog');
+        if (content != undefined) {
+            switch (contentType) {
+                case 'href': dialog_obj.setContentHref(content); break;
+                case 'video': dialog_obj.setContentVideo(content); break;
+                default: dialog_obj.setContent(content);
+            }
+        }
 
-    if (dialog_obj == undefined) {
-        console.log('Element not contain role dialog! Please add attribute data-role="dialog" to element ' + el);
-        return false;
-    }
-
-    dialog_obj.close();
-};
-
-window.toggleMetroDialog = function(el, place){
-    var dialog = $(el), dialog_obj;
-    if (dialog.length == 0) {
-        console.log('Dialog ' + el + ' not found!');
-        return false;
-    }
-
-    dialog_obj = dialog.data('dialog');
-
-    if (dialog_obj == undefined) {
-        console.log('Element not contain role dialog! Please add attribute data-role="dialog" to element ' + el);
-        return false;
-    }
-
-    if (dialog_obj.element.data('opened') === true) {
-        dialog_obj.close();
-    } else {
         if (place !== undefined) {
             dialog_obj.options.place = place;
         }
+
         dialog_obj.open();
+    },
+
+    close: function(el){
+        var dialog = $(el), dialog_obj = dialog.data('dialog');
+
+        if (!this.isDialog(el)) {
+            return false;
+        }
+
+        dialog_obj.close();
+    },
+
+    toggle: function(el, place, content, contentType){
+        var dialog = $(el), dialog_obj = dialog.data('dialog');
+
+        if (!this.isDialog(el)) {
+            return false;
+        }
+
+        if (content != undefined) {
+            switch (contentType) {
+                case 'href': dialog_obj.setContentHref(content); break;
+                case 'video': dialog_obj.setContentVideo(content); break;
+                default: dialog_obj.setContent(content);
+            }
+        }
+
+        if (dialog_obj.element.data('opened') === true) {
+            dialog_obj.close();
+        } else {
+            if (place !== undefined) {
+                dialog_obj.options.place = place;
+            }
+            dialog_obj.open();
+        }
+    },
+
+    create: function(data){
+        var dlg, id, html, buttons, button;
+
+        id = "dialog_id_" + (new Date()).getTime();
+        dlg = $("<div id='"+id+"' class='dialog dialog-ex'></div>");
+
+        if (data.title !== undefined) {
+            $("<div class='dialog-title'>"+data.title+"</div>").appendTo(dlg);
+        }
+        if (data.content !== undefined) {
+            $("<div class='dialog-content'>"+data.content+"</div>").appendTo(dlg);
+        }
+        if (data.actions !== undefined && typeof data.actions == 'object') {
+
+            buttons = $("<div class='dialog-actions'></div>").appendTo(dlg);
+
+            $.each(data.actions, function(){
+                var item = this;
+
+                button = $("<button>").attr("type", "button").addClass("button").html(item.title);
+
+                if (item.cls !== undefined) {
+                    button.addClass(item.cls);
+                }
+
+                button.appendTo(buttons);
+
+                if (item.onclick != undefined) {
+
+                    button[0].addEventListener("click", function(){
+                        if (typeof item.onclick === 'function') {
+                            item.onclick(dlg);
+                        } else {
+                            if (typeof window[item.onclick] === 'function') {
+                                window[item.onclick](dlg);
+                            } else {
+                                var result = eval("(function(){"+item.onclick+"})");
+                                result.call(dlg);
+                            }
+                        }
+                    }, true);
+                }
+            });
+        }
+
+        dlg.appendTo($("body"));
+
+        var dlg_options = $.extend({}, {
+            show: true,
+            closeAction: true,
+            removeOnClose: true
+        }, (data.options != undefined ? data.options : {}));
+
+        return dlg.dialog(dlg_options);
     }
 };
+
+window.metroDialog = dialog;
+
+$.Dialog = function(data){
+    return dialog.create(data);
+};
+
+$(window).on('resize', function(){
+    var dialogs = $('.dialog');
+
+    $.each(dialogs, function(){
+        var dlg = $(this).data('dialog'), element = dlg.element;
+        if (element.data('opened') !== true) {
+            return;
+        }
+        dlg.reset();
+    });
+});
+// Source: js/widgets/donut.js
+$.widget( "metro.donut" , {
+
+    version: "1.0.0",
+
+    options: {
+        size: 100,
+        radius: 50,
+        value: 0,
+        background: "#ffffff",
+        color: "",
+        stroke: "#d1d8e7",
+        fill: "#49649f",
+        fontSize: 24,
+        hole: .8,
+        total: 100,
+        cap: "%",
+        animate: 0
+    },
+
+    _create: function () {
+        var that = this, element = this.element, o = this.options;
+
+        this._setOptionsFromDOM();
+
+        this._createDonut();
+
+        element.data('donut', this);
+    },
+
+    _createDonut: function(){
+        var that = this, element = this.element, o = this.options;
+        var html = "";
+        var r = o.radius  * (1 - (1 - o.hole) / 2);
+        var width = o.radius * (1 - o.hole);
+        var circumference = 2 * Math.PI * r;
+        var strokeDasharray = ((o.value * circumference) / o.total) + ' ' + circumference;
+        var transform = 'rotate(-90 ' + o.radius + ',' + o.radius + ')';
+        var fontSize = r * o.hole * 0.6;
+
+        if (!element.hasClass("donut")) element.addClass("donut");
+
+        element.css({
+            width: o.size,
+            height: o.size,
+            background: o.background
+        });
+
+        html += "<svg>";
+        html += "   <circle class='donut-back' r='"+(r)+"px' cx='"+(o.radius)+"px' cy='"+(o.radius)+"px' transform='"+(transform)+"' fill='none' stroke='"+(o.stroke)+"' stroke-width='"+(width)+"'/>";
+        html += "   <circle class='donut-fill' r='"+(r)+"px' cx='"+(o.radius)+"px' cy='"+(o.radius)+"px' transform='"+(transform)+"' fill='none' stroke='"+(o.fill)+"' stroke-width='"+(width)+"'/>";
+        html += "   <text   class='donut-title' x='"+(o.radius)+"px' y='"+(o.radius)+"px' dy='"+(fontSize/3)+"px' text-anchor='middle' fill='"+(o.fill)+"' font-size='"+(fontSize)+"px'>0"+(o.cap)+"</text>";
+        html += "</svg>";
+
+        element.html(html);
+
+        this.val(o.value);
+    },
+
+    _setValue: function(v){
+        var that = this, element = this.element, o = this.options;
+
+        o.value = v;
+
+        var fill = element.find(".donut-fill");
+        var title = element.find(".donut-title");
+        var r = o.radius  * (1 - (1 - o.hole) / 2);
+        var circumference = 2 * Math.PI * r;
+        var title_value = ((o.value * 1000 / o.total) / 10)+(o.cap);
+        var fill_value = ((o.value * circumference) / o.total) + ' ' + circumference;
+
+        fill.attr("stroke-dasharray", fill_value);
+        title.html(title_value);
+    },
+
+    val: function(v){
+        var that = this, o = this.options;
+
+        if (v === undefined) {
+            return o.value
+        }
+
+        if (o.animate > 0) {
+            var i = -1;
+            var interval;
+
+            interval = setInterval(function(){
+                that._setValue(++i);
+                if (i == v) {
+                    clearInterval(interval);
+                }
+            }, o.animate)
+
+        } else {
+            this._setValue(v);
+        }
+    },
+
+    _setOptionsFromDOM: function(){
+        var element = this.element, o = this.options;
+
+        $.each(element.data(), function(key, value){
+            if (key in o) {
+                try {
+                    o[key] = $.parseJSON(value);
+                } catch (e) {
+                    o[key] = value;
+                }
+            }
+        });
+    },
+
+    _destroy: function () {
+    },
+
+    _setOption: function ( key, value ) {
+        this._super('_setOption', key, value);
+    }
+});
 
 // Source: js/widgets/draggable.js
 $.widget( "metro.draggable" , {
@@ -5226,14 +5867,6 @@ $.widget("metro.dropdown", {
             e.preventDefault();
         });
 
-        $(document).on('click', function(e){
-            $('[data-role=dropdown]').each(function(i, el){
-                if (!$(el).hasClass('keep-open') && $(el).css('display')==='block') {
-                    that._close(el);
-                }
-            });
-        });
-
         element.data('dropdown', this);
     },
 
@@ -5293,6 +5926,25 @@ $.widget("metro.dropdown", {
     }
 });
 
+$(document).on('click', function(e){
+    $('[data-role=dropdown]').each(function(i, el){
+        if (!$(el).hasClass('keep-open') && $(el).css('display')==='block') {
+            var that = $(el).data('dropdown');
+            that._close(el);
+        }
+    });
+
+    var that = $("[data-role=appbar]").data("appbar");
+
+    //we show /hide the pullmenu
+    if ($(that.pullMenu).length !== 0 && $(that.pullMenu).not(":hidden")) {
+        $(that.pullMenu).find(".app-bar-pullmenubar")
+            .not(".hidden").show().slideUp("fast", function () {
+            $(that.pullMenu).hide();
+        });
+    }
+});
+
 // Source: js/widgets/fit-image.js
 $.widget( "metro.fitImage" , {
 
@@ -5322,9 +5974,7 @@ $.widget( "metro.fitImage" , {
             }
         });
 
-        $("<img/>")
-            .attr('src', src)
-            .load(function(){
+        $("<img/>").attr('src', src).on('load', function(){
                 i_w = this.width;
                 i_h = this.height;
             }).remove();
@@ -5372,7 +6022,7 @@ $.widget( "metro.fitImage" , {
         });
 
         if (o.frameColor !== 'default') {
-            if (o.frameColor.isUrl()) {
+            if (metroUtils.isColor(o.frameColor)) {
                 image_frame.css('background-color', o.frameColor);
             } else {
                 image_frame.addClass(o.frameColor);
@@ -5699,14 +6349,14 @@ $.widget("metro.hint", {
 
         if (o.hintShadow) {_hint.addClass("shadow");}
         if (o.hintBackground) {
-            if (o.hintBackground.isColor()) {
+            if (metroUtils.isColor(o.hintBackground)) {
                 _hint.css("background-color", o.hintBackground);
             } else {
                 _hint.addClass(o.hintBackground);
             }
         }
         if (o.hintColor) {
-            if (o.hintColor.isColor()) {
+            if (metroUtils.isColor(o.hintColor)) {
                 _hint.css("color", o.hintColor);
             } else {
                 _hint.addClass(o.hintColor);
@@ -5912,7 +6562,7 @@ $.widget("metro.input", {
         var element = this.element, that = this, o = this.options;
         var textarea = element.find('textarea');
 
-        console.log(textarea);
+        //console.log(textarea);
 
         var fitTextarea = function(){
             textarea.css({
@@ -7387,7 +8037,7 @@ $.widget("metro.slider", {
             }
         });
 
-        element.data('internal_id', uniqueId());
+        element.data('internal_id', metroUtils.uniqueId());
         //console.log(element.data('internal_id'));
 
         o.accuracy = o.accuracy < 0 ? 0 : o.accuracy;
@@ -7706,28 +8356,28 @@ $.widget("metro.slider", {
         }
 
         if (o.color !== 'default') {
-            if (o.color.isColor()) {
+            if (metroUtils.isColor(o.color)) {
                 back.css('background-color', o.color);
             } else {
                 back.addClass(o.color);
             }
         }
         if (o.completeColor !== 'default') {
-            if (o.completeColor.isColor()) {
+            if (metroUtils.isColor(o.completeColor)) {
                 complete.css('background-color', o.completeColor);
             } else {
                 complete.addClass(o.completeColor);
             }
         }
         if (o.bufferColor !== 'default') {
-            if (o.bufferColor.isColor()) {
+            if (metroUtils.isColor(o.bufferColor)) {
                 buffer.css('background-color', o.bufferColor);
             } else {
                 buffer.addClass(o.bufferColor);
             }
         }
         if (o.markerColor !== 'default') {
-            if (o.markerColor.isColor()) {
+            if (metroUtils.isColor(o.markerColor)) {
                 marker.css('background-color', o.markerColor);
             } else {
                 marker.addClass(o.markerColor);
@@ -7868,7 +8518,7 @@ $.widget("metro.stepper", {
 
         if (!element.hasClass('stepper')) {element.addClass('stepper');}
         if (element_id === undefined) {
-            element_id = window.uniqueId(this.widgetName+'_');
+            element_id = metroUtils.uniqueId(this.widgetName+'_');
             element.attr('id', element_id);
         }
 
@@ -8263,7 +8913,7 @@ $.widget( "metro.tabcontrol" , {
                 tab = element.find("a[href='"+stored_target+"']");
                 if (tab) {
                     target = tab.attr('href');
-                    frame = target && target.isUrl() ? false : $(target);
+                    frame = target && metroUtils.isUrl(target) ? false : $(target);
                     o._current.tab = tab;
                     o._current.frame = frame;
                 }
@@ -8275,7 +8925,7 @@ $.widget( "metro.tabcontrol" , {
             tab = element.find("a[href='"+ o.openTarget+"']");
             if (tab) {
                 target = tab.attr('href');
-                frame = target && target.isUrl() ? false : $(target);
+                frame = target && metroUtils.isUrl(target) ? false : $(target);
                 o._current.tab = tab;
                 o._current.frame = frame;
             }
@@ -8284,7 +8934,7 @@ $.widget( "metro.tabcontrol" , {
         if (!o._current.tab) {
 
             $.each(tabs, function (i, v) {
-                var tab = $(v), target = tab.attr('href'), frame = target.isUrl() ? false : $(target);
+                var tab = $(v), target = tab.attr('href'), frame = metroUtils.isUrl(target) ? false : $(target);
                 if (tab.parent().hasClass('active') && !tab.parent().hasClass('disabled') && frame !== false) {
                     o._current.tab = tab;
                     o._current.frame = frame;
@@ -8295,7 +8945,7 @@ $.widget( "metro.tabcontrol" , {
         if (!o._current.tab) {
 
             for(var i = 0; i < tabs.length; i++) {
-                if (!$(tabs[i]).attr('href').isUrl() && !$(tabs[i]).parent().hasClass('disabled')) {
+                if (!metroUtils.isUrl($(tabs[i]).attr('href')) && !$(tabs[i]).parent().hasClass('disabled')) {
                     o._current.tab = $(tabs[i]);
                     o._current.frame = $($(tabs[i]).attr('href'));
                     break;
@@ -8370,7 +9020,7 @@ $.widget( "metro.tabcontrol" , {
                 }
             }
 
-            if (target.isUrl()) {
+            if (metroUtils.isUrl(target)) {
                 window.location.href = target;
                 return true;
             }
@@ -9038,28 +9688,29 @@ $.widget( "metro.validator" , {
             return val.trim().length <= len;
         },
         min: function(val, min_value){
+
             if (min_value == undefined || isNaN(min_value)) {
                 return false;
             }
-            if (val.trim() === "") {
+            if (!this.number(val)) {
                 return false;
             }
             if (isNaN(val)) {
                 return false;
             }
-            return val >= min_value;
+            return Number(val) >= Number(min_value);
         },
         max: function(val, max_value){
             if (max_value == undefined || isNaN(max_value)) {
                 return false;
             }
-            if (val.trim() === "") {
+            if (!this.number(val)) {
                 return false;
             }
             if (isNaN(val)) {
                 return false;
             }
-            return val <= max_value;
+            return Number(val) <= Number(max_value);
         },
         email: function(val){
             return /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i.test(val);
@@ -9138,7 +9789,7 @@ $.widget( "metro.validator" , {
         $(window).scroll(function(e){
             var st = $(this).scrollTop();
             var delta = isNaN(st - this._scroll) ? 0 : st - this._scroll;
-            $(".validator-hint.hint2").css({
+            $(".validator-hint.hint2:not(.line)").css({
                 top: '-='+delta
             });
             this._scroll = st;
@@ -9172,9 +9823,26 @@ $.widget( "metro.validator" , {
         });
 
         $.each(inputs, function(i, v){
+            var this_result = true;
             var input = $(v);
-            var func = input.data('validateFunc'), arg = input.data('validateArg');
-            var this_result = that.funcs[func](input.val(), arg);
+            var func = [], arg = [];
+
+            func = input.data('validateFunc') != undefined ? String(input.data('validateFunc')).split(",") : [];
+            $.each(func, function(i, v){
+                func[i] = String(func[i]).trim();
+            });
+
+            if (func.indexOf('pattern') !== -1) {
+                arg.push(String(input.data('validateArg')));
+            } else {
+                arg  = input.data('validateArg') != undefined ? String(input.data('validateArg')).split(",") : [];
+            }
+
+            $.each(func, function(i, func_name){
+                if (!this_result) return;
+                var _args = arg[i] != undefined ? arg[i] : false;
+                this_result = that.funcs[func_name.trim()](input.val(), _args);
+            });
 
             if (!this_result) {
                 if (typeof o.onErrorInput === 'function') {
@@ -9283,13 +9951,13 @@ $.widget( "metro.validator" , {
             'min-width': o.hintSize
         });
 
-        if (background.isColor()) {
+        if (metroUtils.isColor(background)) {
             hint.css('background-color', background);
         } else {
             hint.addClass(background);
         }
 
-        if (color.isColor()) {
+        if (metroUtils.isColor(color)) {
             hint.css('color', color);
         } else {
             hint.addClass(color);
@@ -9436,7 +10104,7 @@ $.widget( "metro.video" , {
         poster: false,
         src: false,
         loop: false,
-        preload: false,
+        preload: true,
         autoplay: false,
         muted: false,
         volume:.5,
@@ -9467,7 +10135,7 @@ $.widget( "metro.video" , {
         } else if (o.videoSize == 'SD' && o.videoSize == 'sd') {
             player_height = 3 * player_width / 4;
         } else {
-
+            player_height = 9 * player_width / 16;
         }
 
         element.addClass('video-player');
@@ -9536,11 +10204,14 @@ $.widget( "metro.video" , {
         var video = element.find("video"), video_obj = video[0];
 
         video.on('loadedmetadata', function(){
+            //console.log("loadedmetadata");
             element.data('duration', video_obj.duration.toFixed(0));
-            info_box.html("00:00" + " / " + secondsToFormattedString(element.data('duration')) );
+            info_box.html("00:00" + " / " + metroUtils.secondsToFormattedString(element.data('duration')) );
         });
 
+        // Not fired in Chrome
         video.on("canplay", function(){
+            //console.log("canplay");
             controls.fadeIn();
             preloader.hide();
             var buffered = video_obj.buffered.length ? Math.round(Math.floor(video_obj.buffered.end(0)) / Math.floor(video_obj.duration) * 100) : 0;
@@ -9619,7 +10290,7 @@ $.widget( "metro.video" , {
         var info_box = element.find(".controls .info-box");
         var currentTime = Math.round(video_obj.currentTime);
 
-        info_box.html(secondsToFormattedString(currentTime) + " / " + secondsToFormattedString(element.data('duration')));
+        info_box.html(metroUtils.secondsToFormattedString(currentTime) + " / " + metroUtils.secondsToFormattedString(element.data('duration')));
     },
 
     _setStreamSliderPosition: function(){
@@ -9985,7 +10656,7 @@ $.widget( "metro.window" , {
 
         if (o.captionStyle && typeof o.captionStyle === 'object') {
             $.each(o.captionStyle, function(key, value){
-                if (value.isColor()) {
+                if (metroUtils.isColor(value)) {
                     capt.css(key, value + " !important");
                 } else {
                     capt.addClass(value);
@@ -9995,7 +10666,7 @@ $.widget( "metro.window" , {
 
         if (o.contentStyle && typeof o.contentStyle === 'object') {
             $.each(o.contentStyle, function(key, value){
-                if (value.isColor()) {
+                if (metroUtils.isColor(value)) {
                     cont.css(key, value + " !important");
                 } else {
                     cont.addClass(value);
@@ -10100,7 +10771,7 @@ $.widget( "metro.window" , {
 
         if (!c) {return;}
 
-        if (c.isUrl()) {
+        if (metroUtils.isUrl(c)) {
             if (c.indexOf('youtube') > -1) {
                 var iframe = $("<iframe>");
                 var video_container = $("<div/>").addClass('video-container').appendTo(content);
