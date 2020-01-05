@@ -35,3 +35,5 @@ log/
 src/github.com/
 src/golang.org/
 *.swp
+bin/webconsole
+conf/conf.json

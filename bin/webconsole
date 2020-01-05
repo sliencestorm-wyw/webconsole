@@ -20,15 +20,16 @@
 NAME=webconsole
 
 PIDFILE=/opt/webconsole/log/apibox.pid 
+
 . /etc/init.d/functions
+
 webconsole_start() {
 	nohup  /opt/webconsole/bin/apibox   start   >/dev/null   2>&1 &
 }
 
 webconsole_stop() {
-        /opt/webconsole/bin/apibox  stop   >/dev/null   2>&1 &
-        rm -f  $PIDFILE
-
+    /opt/webconsole/bin/apibox  stop   >/dev/null   2>&1 &
+    rm -f  $PIDFILE
 }
 
 case "$1" in

@@ -1,5 +1,6 @@
 {
-    "web": {
+    "web":
+    {
         "addr": ":8080",
         "tls_addr": ":8443",
         "tls_url": "https://localhost:8443",
