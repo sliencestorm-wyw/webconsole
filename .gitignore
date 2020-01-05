@@ -26,10 +26,6 @@ bin/apibox
 
 .vscode/tasks.json
 
-bin/apibox
-
-run
-*/run.go
 /bin/apibox
 log/
 src/github.com/
