@@ -369,7 +369,7 @@ func (c *Console) ConsoleMainPage(w http.ResponseWriter, r *http.Request) {
       vm_time := strings.TrimSpace(de_vm_info_arr[3])
 
 			now := time.Now()
-			start, _ := time.Parse(Time.RFC3339, vm_time)
+			start, _ := time.Parse(time.RFC3339, vm_time)
 
 			url_timeout, err := time.ParseDuration(Conf.Web.UrlTimeout)
 			if nil != err {
@@ -403,7 +403,7 @@ func (c *Console) ConsoleLogin(w http.ResponseWriter, r *http.Request) {
 	user_pwd := ctx.GetFormValue("user_pwd")
 	vm_addr := ctx.GetFormValue("vm_addr")
   vm_cid := ctx.GetFormValue("vm_cid")
-	vm_time := time.Now().Format(Time.RFC3339)
+	vm_time := time.Now().Format(time.RFC3339)
 
   apibox.Log_Debug(user_name,user_pwd,vm_addr,vm_cid,vm_time)
 
