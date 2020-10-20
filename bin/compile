@@ -1,5 +1,5 @@
 #!/bin/bash
 
-GOPATH=/home/cczdev/workspaces/webconsole
+GOPATH=/opt/webconsole/
 
-(cd $GOPATH/src/apibox.club/apibox; GOPATH=$GOPATH go build; mv apibox $GOPATH/bin)
+(cd $GOPATH/src/apibox.club/apibox; GOPATH=$GOPATH go build; cp apibox $GOPATH/bin)

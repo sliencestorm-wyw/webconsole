@@ -103,7 +103,9 @@ var upgrader = websocket.Upgrader{
 		for _, v := range strings.Split(cwl, ",") {
 			if strings.EqualFold(strings.TrimSpace(v), r.Host) {
 				return true
-			}
+			} else if strings.EqualFold(strings.TrimSpace(v), "*:*") {
+				return true
+  			}
 		}
 		return false
 	},
